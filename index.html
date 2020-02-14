@@ -1,0 +1,117 @@
+ <html>
+ <script type="text/javascript">
+    class View {
+        constructor(ctx) {
+            this.ctx = ctx;
+            this.lines = [new Line(true, 100, 500),
+                          new Line(true, 300, 500),
+                          new Line(false, 100, 500),
+                          new Line(false, 300, 500),
+                         ];
+            this.currentLine = null;
+            this.imageObj = new Image();
+            this.imageObj.src = 'https://3.bp.blogspot.com/-gA8KyZv9Zbo/VKKtQbVwDjI/AAAAAAAAAg4/UFNT6TATiTE/s1600/19858_adventure_time.jpg';
+        }
+        drawImage() {
+            this.ctx.drawImage(this.imageObj, 0, 0, 400, 400);
+            this.lines.forEach(line => {
+                line.draw(this.ctx);
+            });
+        }
+        move(evt) {
+            this.drawImage();
+        }
+        mouseDown(evt) {
+        }
+        mouseUp() {
+            this.currentLine = null;
+        }
+    } 
+    
+    class Line {
+        constructor(vertical, pos, length) {
+            this.vertical = vertical;
+            this.pos = pos;
+            this.length;
+            this.x1 = 0;
+            this.y1 = 0;
+            this.x2 = 0;
+            this.y2 = 0;
+            if(vertical) {
+                this.x1 = pos;
+                this.x2 = pos;
+                this.y2 = length;
+            } else {
+                this.y1 = pos;
+                this.y2 = pos;
+                this.x2 = length;
+            }
+        }
+        draw(ctx) {
+        ctx.beginPath();
+            ctx.moveTo(this.x1, this.y1);
+            ctx.lineTo(this.x2, this.y2);
+            ctx.strokeStyle = x;
+            ctx.lineWidth = y;
+            ctx.stroke();
+            ctx.closePath();
+        }
+        move(x, y) {
+            if(this.vertical) {
+                this.x1 = x;
+                this.x2 = x;
+            } else {
+                this.y1 = y;
+                this.y2 = y;
+            }
+        }
+    }  
+     
+     var canvas, ctx, flag = false,
+         prevX = 0,
+         currX = 0,
+         prevY = 0,
+         currY = 0,
+         dot_flag = false
+         view = null;
+
+     var x = "black",
+         y = 2;
+
+     function init() {
+         canvas = document.getElementById('can');
+         ctx = canvas.getContext("2d");
+         w = canvas.width;
+         h = canvas.height;
+         view = new View(ctx);
+
+         canvas.addEventListener("mousemove", function(e) {
+             view.move(e);
+         }, false);
+         canvas.addEventListener("mousedown", function(e) {
+             view.mouseDown(e);
+         }, false);
+         canvas.addEventListener("mouseup", function(e) {
+             view.mouseUp();
+         }, false);
+         canvas.addEventListener("mouseout", function(e) {
+             view.mouseUp();
+         }, false);
+     }
+
+     function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+     }
+
+ </script>
+
+ <body onload="init()">
+     <canvas id="can" width="400" height="400" style="position:absolute;top:10%;left:10%;border:2px solid;">Nie mogę załadować canvas'a/canvas'u</canvas>
+     <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
+ </body>
+
+ </html>
